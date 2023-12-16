@@ -6,7 +6,7 @@
  * - a ball search behavior card
  * - a skill for getting behind the ball
  *
- * @author Arne Hasselbring
+ * @author Arne Hasselbrings
  */
 
 #include "Representations/BehaviorControl/FieldBall.h"
@@ -157,7 +157,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       transition
       {
-        if(state_time > maxKickWaitTime || (state_time > minKickWaitTime && theInWalkKickSkill.isDone()))
+        if(state_time > maxKickWaitTime || (state_time > minKickWaitTime && theInjoseSkill.isDone()))
           goto start;
       }
 
