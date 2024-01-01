@@ -95,7 +95,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
       }
     }
-
+    
     state(walkToBall)
     {
       transition
@@ -157,7 +157,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       transition
       {
-        if(state_time > maxKickWaitTime || (state_time > minKickWaitTime && theInjoseSkill.isDone()))
+        if(state_time > maxKickWaitTime || (state_time > minKickWaitTime && theInWalkKickSkill.isDone()))
           goto start;
       }
 

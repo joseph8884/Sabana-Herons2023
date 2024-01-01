@@ -37,7 +37,7 @@ CARD(KeeperSearchForBallCard,{,
 }); //Esto es lo que crea la carta
 
 
-class KeeperSearchForBallCard : public KeeperSearchForBallCard
+class KeeperSearchForBallCard : public KeeperSearchForBallCardBase
 {
     bool preconditions() const override
     {
