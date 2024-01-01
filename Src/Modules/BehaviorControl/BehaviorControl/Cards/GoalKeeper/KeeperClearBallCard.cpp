@@ -4,7 +4,7 @@
 #include "Representations/Modeling/RobotPose.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 
-CARD(DefendGoalCard,{,
+CARD(KeeperClearBallCard,{,
     CALLS(Activity),//los llamados son para llamar todas las skills se hace por CALLS()
 
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
@@ -17,7 +17,7 @@ CARD(DefendGoalCard,{,
     }),
 }); 
 
-class DefendGoalCard : public DefendGoalCard
+class KeeperClearBallCard : public KeeperClearBallCard
 {
     bool preconditions() const override
     {
@@ -30,7 +30,7 @@ class DefendGoalCard : public DefendGoalCard
     }
 
     option{
-      theActivitySkill(BehaviorStatus::DefendGoalCard);
+      theActivitySkill(BehaviorStatus::KeeperClearBallCard);
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)
@@ -54,4 +54,4 @@ class DefendGoalCard : public DefendGoalCard
     }
 }
 //Esto es lo que crea la carta
-MAKE_CARD(DefendGoalCard)
+MAKE_CARD(KeeperClearBallCard)
