@@ -31,7 +31,7 @@ class ReturnToGoalCard : public ReturnToGoalCardBase
     }
 
     option{
-      theActivitySkill(BehaviorStatus::ReturnToGoalCard);
+      theActivitySkill(BehaviorStatus::unknown);
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)

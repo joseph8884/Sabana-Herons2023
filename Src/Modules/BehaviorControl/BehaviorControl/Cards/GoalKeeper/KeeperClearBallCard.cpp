@@ -31,7 +31,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
     }
 
     option{
-      theActivitySkill(BehaviorStatus::KeeperClearBallCard);
+      theActivitySkill(BehaviorStatus::unknown);
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)

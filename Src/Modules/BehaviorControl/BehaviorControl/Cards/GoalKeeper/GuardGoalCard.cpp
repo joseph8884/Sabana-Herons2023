@@ -19,7 +19,7 @@ CARD(GuardGoalCard,{,
 }); 
 
 class GuardGoalCard : public GuardGoalCardBase
-{s
+{
     bool preconditions() const override
     {
         return true;
@@ -31,7 +31,7 @@ class GuardGoalCard : public GuardGoalCardBase
     }
 
     option{
-      theActivitySkill(BehaviorStatus::GuardGoalCard);
+      theActivitySkill(BehaviorStatus::unknown);
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)

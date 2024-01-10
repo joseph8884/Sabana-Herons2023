@@ -31,7 +31,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
     }
 
     option{
-      theActivitySkill(BehaviorStatus::DribbleToGoalCard);
+      theActivitySkill(BehaviorStatus::unknown);
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)
