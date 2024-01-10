@@ -29,7 +29,7 @@ class GuardGoalCard : public GuardGoalCardBase
     {
         return true;
     }
-
+  /*
     option{
       theActivitySkill(BehaviorStatus::unknown);
       initial_state(start){
@@ -53,6 +53,7 @@ class GuardGoalCard : public GuardGoalCardBase
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
     }
+  */
 }
 //Esto es lo que crea la carta
 MAKE_CARD(GuardGoalCard)
