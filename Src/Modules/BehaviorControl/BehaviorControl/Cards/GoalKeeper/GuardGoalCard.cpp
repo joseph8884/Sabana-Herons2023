@@ -17,7 +17,7 @@ CARD(GuardGoalCard,{,
     }),
 }); 
 
-class GuardGoalCard : public GuardGoalCard
+class GuardGoalCard : public GuardGoalCardBase
 {
     bool preconditions() const override
     {

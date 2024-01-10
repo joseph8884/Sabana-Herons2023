@@ -17,7 +17,7 @@ CARD(KeeperClearBallCard,{,
     }),
 }); 
 
-class KeeperClearBallCard : public KeeperClearBallCard
+class KeeperClearBallCard : public KeeperClearBallCardBase
 {
     bool preconditions() const override
     {

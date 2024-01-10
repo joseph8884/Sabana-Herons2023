@@ -17,7 +17,7 @@ CARD(ReturnToGoalCard,{,
     }),
 }); 
 
-class ReturnToGoalCard : public ReturnToGoalCard
+class ReturnToGoalCard : public ReturnToGoalCardBase
 {
     bool preconditions() const override
     {

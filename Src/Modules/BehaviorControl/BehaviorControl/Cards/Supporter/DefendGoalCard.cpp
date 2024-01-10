@@ -9,7 +9,7 @@ CARD(DefendGoalCard,
   CALLS(Stand),
 });
 
-class DefendGoalCard : public CodeReleasePositionForKickOffCardBase
+class DefendGoalCard : public DefendGoalCardBase
 {
   bool preconditions() const override
   {

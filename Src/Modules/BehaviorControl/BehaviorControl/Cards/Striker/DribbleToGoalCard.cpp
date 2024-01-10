@@ -17,7 +17,7 @@ CARD(DribbleToGoalCard,{,
     }),
 }); 
 
-class DribbleToGoalCard : public DribbleToGoalCard
+class DribbleToGoalCard : public DribbleToGoalCardBase
 {
     bool preconditions() const override
     {
