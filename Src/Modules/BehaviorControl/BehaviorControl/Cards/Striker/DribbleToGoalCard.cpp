@@ -3,6 +3,7 @@
 #include "Representations/Configuration/FieldDimensions.h"
 #include "Representations/Modeling/RobotPose.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
+#include "Tools/BehaviorControl/Framework/Card/CabslCard.h"
 
 CARD(DribbleToGoalCard,{,
     CALLS(Activity),//los llamados son para llamar todas las skills se hace por CALLS()
