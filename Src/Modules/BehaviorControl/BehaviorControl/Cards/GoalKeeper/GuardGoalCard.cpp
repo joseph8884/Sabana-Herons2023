@@ -15,6 +15,7 @@ CARD(GuardGoalCard,{,
     //Aca son todas las variables que se quiera definir para despues usarse dentro de la clase
     {,//Mirar cuales sirven y cuales no
         //definir parametros
+        (int)(1000) initialWaitTime,
     }),
 }); 
 
@@ -29,31 +30,31 @@ class GuardGoalCard : public GuardGoalCardBase
     {
         return true;
     }
-  /*
     option{
       theActivitySkill(BehaviorStatus::unknown);
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)
-            //Aca es el cambio de escena
+            return 0;//Aca es el cambio de escena
         }
         action{
-          
+          theLookForwardSkill();
+          theStandSkill();
           //Lo que quieres que haga cuando la se llegue a este estado
         }
       }
       state(){
         transition{
-            if()//Condicion para que pase al siguiente bloque
-                //siguiente bloque
+            if(true)//Condicion para que pase al siguiente bloque
+              return 0;  //siguiente bloque
         }
         action{
-        
+          theLookForwardSkill();
+          theStandSkill();
         }
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
     }
-  */
-}
+};
 //Esto es lo que crea la carta
 MAKE_CARD(GuardGoalCard)
