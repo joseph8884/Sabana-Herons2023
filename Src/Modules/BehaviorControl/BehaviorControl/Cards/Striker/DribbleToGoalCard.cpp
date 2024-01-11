@@ -7,7 +7,7 @@
 
 CARD(DribbleToGoalCard,{,
     CALLS(Activity),//los llamados son para llamar todas las skills se hace por CALLS()
-    CALLS(LookForward)
+    CALLS(LookForward),
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
     REQUIRES(FieldDimensions),
     REQUIRES(RobotPose),
