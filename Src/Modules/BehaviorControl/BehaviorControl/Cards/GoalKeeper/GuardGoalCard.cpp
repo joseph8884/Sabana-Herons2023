@@ -1,5 +1,6 @@
 #include "Representations/BehaviorControl/FieldBall.h"
 #include "Representations/BehaviorControl/Skills.h"
+#include "Representations/BehaviorControl/Skills.h"
 #include "Representations/Configuration/FieldDimensions.h"
 #include "Representations/Modeling/RobotPose.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
@@ -7,7 +8,7 @@
 
 CARD(GuardGoalCard,{,
     CALLS(Activity),//los llamados son para llamar todas las skills se hace por CALLS()
-
+    CALLS(LookForward),
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
     REQUIRES(FieldDimensions),
     REQUIRES(RobotPose),
@@ -35,22 +36,20 @@ class GuardGoalCard : public GuardGoalCardBase
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)
-            return 0;//Aca es el cambio de escena
+            goto siguienteBloque//Aca es el cambio de escena
         }
         action{
           theLookForwardSkill();
-          theStandSkill();
           //Lo que quieres que haga cuando la se llegue a este estado
         }
       }
-      state(){
+      state(siguienteBloque){
         transition{
             if(true)//Condicion para que pase al siguiente bloque
-              return 0;  //siguiente bloque
+              goto start  //siguiente bloque
         }
         action{
           theLookForwardSkill();
-          theStandSkill();
         }
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
