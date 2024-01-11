@@ -15,6 +15,7 @@ CARD(DribbleToGoalCard,{,
     //Aca son todas las variables que se quiera definir para despues usarse dentro de la clase
     {,//Mirar cuales sirven y cuales no
         //definir parametros
+        (int)(1000) initialWaitTime,
     }),
 }); 
 
