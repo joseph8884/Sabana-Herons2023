@@ -7,7 +7,7 @@
 
 CARD(KeeperCatchBallCard,{,
     CALLS(Activity),//los llamados son para llamar todas las skills se hace por CALLS()
-
+    CALLS(LookForward),
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
     REQUIRES(FieldDimensions),
     REQUIRES(RobotPose),
@@ -35,24 +35,24 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)
-            //Aca es el cambio de escena
+            goto siguienteBloque;//Aca es el cambio de escena
         }
         action{
-          
+          theLookForwardSkill();
           //Lo que quieres que haga cuando la se llegue a este estado
         }
       }
-      state(){
+      state(siguienteBloque){
         transition{
-            if()//Condicion para que pase al siguiente bloque
-                //siguiente bloque
+            if(true)//Condicion para que pase al siguiente bloque
+              goto start;  //siguiente bloque
         }
         action{
-        
+          theLookForwardSkill();
         }
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
     }
-}
+};
 //Esto es lo que crea la carta
 MAKE_CARD(KeeperCatchBallCard)

@@ -36,7 +36,7 @@ class GuardGoalCard : public GuardGoalCardBase
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)
-            goto siguienteBloque//Aca es el cambio de escena
+            goto siguienteBloque;//Aca es el cambio de escena
         }
         action{
           theLookForwardSkill();
@@ -46,7 +46,7 @@ class GuardGoalCard : public GuardGoalCardBase
       state(siguienteBloque){
         transition{
             if(true)//Condicion para que pase al siguiente bloque
-              goto start  //siguiente bloque
+              goto start;  //siguiente bloque
         }
         action{
           theLookForwardSkill();
