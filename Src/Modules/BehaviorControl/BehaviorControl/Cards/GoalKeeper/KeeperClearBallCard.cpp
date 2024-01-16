@@ -18,10 +18,10 @@ CARD(KeeperClearBallCard,{,
     //Aca son todas las variables que se quiera definir para despues usarse dentro de la clase
     {,//Mirar cuales sirven y cuales no
         //definir parametros
-      (float)(0.3f) walkSpeed,
+      (float)(0.5f) walkSpeed,
       (int)(1000) initialWaitTime,
-      (int)(7000) ballNotSeenTimeOut,
-      (float)(200.f) ballNearThreshold,
+      (int)(4000) ballNotSeenTimeOut,
+      (float)(300.f) ballNearThreshold,
     }),
 }); 
 
