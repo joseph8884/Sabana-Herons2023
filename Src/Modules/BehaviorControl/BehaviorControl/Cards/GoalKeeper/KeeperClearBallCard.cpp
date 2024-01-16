@@ -8,6 +8,9 @@
 CARD(KeeperClearBallCard,{,
     CALLS(Activity),//los llamados son para llamar todas las skills se hace por CALLS()
     CALLS(LookForward),
+    CALLS(Stand),
+    CALLS(WalkAtRelativeSpeed),
+    CALLS(WalkToTarget),
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
     REQUIRES(FieldDimensions),
     REQUIRES(RobotPose),
@@ -16,6 +19,8 @@ CARD(KeeperClearBallCard,{,
     {,//Mirar cuales sirven y cuales no
         //definir parametros
       (int)(1000) initialWaitTime,
+      (int)(7000) ballNotSeenTimeOut,
+      (float)(200.f) ballNearThreshold,
     }),
 }); 
 
@@ -32,24 +37,68 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
     }
 
     option{
-      theActivitySkill(BehaviorStatus::unknown);
+      theActivitySkill(BehaviorStatus::KeeperClearBallCard);
      initial_state(start){
         transition{
           if(state_time > initialWaitTime)
-            goto siguienteBloque;//Aca es el cambio de escena
+            goto turnToBall;//Aca es el cambio de escena
         }
         action{
           theLookForwardSkill();
+          theStandSkill();
           //Lo que quieres que haga cuando la se llegue a este estado
         }
       }
-      state(siguienteBloque){
+      state(turnToBall){
         transition{
-            if(true)//Condicion para que pase al siguiente bloque
-              goto start;  //siguiente bloque
+            if(!theFieldBall.ballWasSeen(ballNotSeenTimeOut))
+              goto searchForBall;
+            else
+              goto waitToBall;
+            
         }
         action{
           theLookForwardSkill();
+          theStandSkill();
+        }
+      }
+      state(waitToBall){
+        transition{
+          if(!theFieldBall.ballWasSeen(ballNotSeenTimeOut))
+            goto searchForBall;
+          if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold)) 
+            goto walkToBall;
+
+        }
+        action{
+          theLookForwardSkill();
+          theStandSkill();
+        }
+      }
+      state(walkToBall)
+    {
+      transition
+      {
+        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+          goto searchForBall;
+        else
+          goto waitToBall;
+      }
+
+      action
+      {
+        theLookForwardSkill();
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
+      }
+    }
+      state(searchForBall){
+        transition{
+          if(theFieldBall.ballWasSeen())
+            goto turnToBall;
+        }
+        action{
+          theLookForwardSkill();
+          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         }
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
