@@ -40,6 +40,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
     option{
       theActivitySkill(BehaviorStatus::KeeperClearBallCard);
      initial_state(start){
+      Vector2f initialAreaPosition = getInitialAreaPosition(theFieldDimensions);
         transition{
           if(state_time > initialWaitTime)
             goto turnToBall;//Aca es el cambio de escena
@@ -48,6 +49,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
           theLookForwardSkill();
           theStandSkill();
           //Lo que quieres que haga cuando la se llegue a este estado
+          theWalkToTargetSkill(walkSpeed, initialAreaPosition);
         }
       }
       state(turnToBall){
@@ -103,6 +105,13 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
         }
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
+    }
+    Vector2f getInitialAreaPosition(const FieldDimensions& fieldDim){
+      // Calcula las coordenadas del área inicial
+      float xInitialArea = (fieldDim.xPosOwnGroundline + fieldDim.xPosOwnGoal) / 2.0f;
+      float yInitialArea = (fieldDim.yPosLeftGoal + fieldDim.yPosRightGoal) / 2.0f;
+
+      return Vector2f(xInitialArea, yInitialArea);
     }
 };
 //Esto es lo que crea la carta
