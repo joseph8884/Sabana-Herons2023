@@ -48,8 +48,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
         action{
           theLookForwardSkill();
           theStandSkill();
-          //Lo que quieres que haga cuando la se llegue a este estado
-          theWalkToTargetSkill(walkSpeed, initialAreaPosition);
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), initialAreaPosition);
         }
       }
       state(turnToBall){
