@@ -56,12 +56,26 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
             if(!theFieldBall.ballWasSeen(ballNotSeenTimeOut))
               goto searchForBall;
             else
-              goto waitToBall;
+              goto alignToBallAndGoal;
             
         }
         action{
           theLookForwardSkill();
           theStandSkill();
+        }
+      }
+      state(alignToBallAndGoal){
+        transition{
+          if(!theFieldBall.ballWasSeen(ballNotSeenTimeOut))
+              goto searchForBall;
+          if((theFieldBall.positionRelative.x() < theRobotPose.translation.x() && theRobotPose.translation.x() < FieldDimensions::xPosOwnGoal)&&(FieldDimensions::yPosLeftGoal < theRobotPose.translation.y() && theRobotPose.translation.y() < FieldDimensions::yPosRightGoal))
+              goto waitToBall;
+            else:
+              goto alignToBallAndGoal
+        }
+        action{
+          theLookForwardSkill();
+          alignToBallAndGoal(FieldDimensions)
         }
       }
       state(waitToBall){
@@ -105,13 +119,25 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
     }
-    Vector2f getInitialAreaPosition(const FieldDimensions& fieldDim){
-      // Calcula las coordenadas del área inicial
-      float xInitialArea = (fieldDim.xPosOwnGroundline + fieldDim.xPosOwnGoal) / 2.0f;
-      float yInitialArea = (fieldDim.yPosLeftGoal + fieldDim.yPosRightGoal) / 2.0f;
+    void alignToBallAndGoal(const FieldDimensions& fieldDim)
+{
+    // Obtener la posición relativa de la pelota en el campo
+    Vector2f ballPosition = theFieldBall.positionRelative;
 
-      return Vector2f(xInitialArea, yInitialArea);
-    }
+    // Obtener las coordenadas del arco propio
+    float xOwnGoal = fieldDim.xPosOwnGoal;
+    float yLeftGoalPost = fieldDim.yPosLeftGoal;
+    float yRightGoalPost = fieldDim.yPosRightGoal;
+
+    // Calcular el punto medio entre la pelota y el arco
+    Vector2f targetPosition = Vector2f((ballPosition.x() + xOwnGoal) / 2.0f, (ballPosition.y() + yLeftGoalPost + yRightGoalPost) / 2.0f);
+
+    // Calcular el ángulo de orientación hacia el punto medio
+    Angle orientation = (targetPosition - theRobotPose.translation).angle();
+
+    // Usar la función de movimiento para dirigir al robot hacia el punto medio y orientarlo en la dirección correcta
+    theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(targetPosition, orientation);
+}
 };
 //Esto es lo que crea la carta
 MAKE_CARD(KeeperClearBallCard)
