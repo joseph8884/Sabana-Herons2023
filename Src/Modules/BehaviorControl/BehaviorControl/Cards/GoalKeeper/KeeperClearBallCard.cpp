@@ -40,7 +40,6 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
     option{
       theActivitySkill(BehaviorStatus::KeeperClearBallCard);
      initial_state(start){
-      Vector2f initialAreaPosition = getInitialAreaPosition(theFieldDimensions);
         transition{
           if(state_time > initialWaitTime)
             goto turnToBall;//Aca es el cambio de escena
@@ -48,7 +47,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
         action{
           theLookForwardSkill();
           theStandSkill();
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), initialAreaPosition);
+          alignToBallAndGoal(theFieldDimensions);
         }
       }
       state(turnToBall){
@@ -68,14 +67,14 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
         transition{
           if(!theFieldBall.ballWasSeen(ballNotSeenTimeOut))
               goto searchForBall;
-          if((theFieldBall.positionRelative.x() < theRobotPose.translation.x() && theRobotPose.translation.x() < FieldDimensions::xPosOwnGoal)&&(FieldDimensions::yPosLeftGoal < theRobotPose.translation.y() && theRobotPose.translation.y() < FieldDimensions::yPosRightGoal))
+          if((theFieldBall.positionRelative.x() < theRobotPose.translation.x() && theRobotPose.translation.x() < theFieldDimensions.xPosOwnGoal)&&(theFieldDimensions.yPosLeftGoal < theRobotPose.translation.y() && theRobotPose.translation.y() < theFieldDimensions.yPosRightGoal))
               goto waitToBall;
             else:
-              goto alignToBallAndGoal
+              goto alignToBallAndGoal;
         }
         action{
           theLookForwardSkill();
-          alignToBallAndGoal(FieldDimensions)
+          alignToBallAndGoal(theFieldDimensions);
         }
       }
       state(waitToBall){
@@ -136,7 +135,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
     Angle orientation = (targetPosition - theRobotPose.translation).angle();
 
     // Usar la función de movimiento para dirigir al robot hacia el punto medio y orientarlo en la dirección correcta
-    theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(targetPosition, orientation);
+    theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(targetPosition, orientation));
 }
 };
 //Esto es lo que crea la carta
