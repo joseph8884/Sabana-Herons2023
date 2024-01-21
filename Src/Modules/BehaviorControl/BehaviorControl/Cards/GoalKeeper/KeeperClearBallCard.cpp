@@ -69,7 +69,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
               goto searchForBall;
           if((theFieldBall.positionRelative.x() < theRobotPose.translation.x() && theRobotPose.translation.x() < theFieldDimensions.xPosOwnGoal)&&(theFieldDimensions.yPosLeftGoal < theRobotPose.translation.y() && theRobotPose.translation.y() < theFieldDimensions.yPosRightGoal))
               goto waitToBall;
-            else:
+            else
               goto alignToBallAndGoal;
         }
         action{
@@ -135,7 +135,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
     Angle orientation = (targetPosition - theRobotPose.translation).angle();
 
     // Usar la función de movimiento para dirigir al robot hacia el punto medio y orientarlo en la dirección correcta
-    theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(targetPosition, orientation));
+    theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(orientation,targetPosition));
 }
 };
 //Esto es lo que crea la carta
