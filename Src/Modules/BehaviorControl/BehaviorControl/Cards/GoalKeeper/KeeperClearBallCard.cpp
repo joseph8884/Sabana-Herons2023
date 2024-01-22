@@ -11,6 +11,7 @@ CARD(KeeperClearBallCard,{,
     CALLS(Stand),
     CALLS(WalkAtRelativeSpeed),
     CALLS(WalkToTarget),
+    CALLS(InWalkKick),
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
     REQUIRES(FieldDimensions),
     REQUIRES(RobotPose),
@@ -32,6 +33,7 @@ CARD(KeeperClearBallCard,{,
     (Rangef)({20.f, 50.f}) ballOffsetYRange,
     (int)(10) minKickWaitTime,
     (int)(3000) maxKickWaitTime,
+    (float)(1500.f) ballNearToMeThreshold,
   }),
 }); 
 
@@ -73,7 +75,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
         if(std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
-          goto walkToBall;
+          goto waitToBall;
       }
 
       action
@@ -82,6 +84,18 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
       }
     }
+    state(waitToBall){
+        transition{
+          if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))//Hacer la condicion de que vaya a caminar solo si esta dentro del area.
+            goto searchForBall;
+          if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearToMeThreshold))//crear la condicion para saber si el balon esta cerca o no, si esta cerca que vaya a por ella, si no que espere
+            goto walkToBall;
+        }
+        action{
+          theLookForwardSkill();
+          theStandSkill();
+        }
+      }
 
     state(walkToBall)
     {
@@ -90,7 +104,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
         if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold))
-          goto alignToGoal;
+          goto alignToDefendGoal;
       }
 
       action
@@ -100,9 +114,9 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
       }
     }
 
-    state(alignToGoal)
+    state(alignToDefendGoal)
     {
-      const Angle angleToGoal = calcAngleToGoal();
+      const Angle angleToGoal = calcAngleToDefendGoal();
 
       transition
       {
@@ -121,7 +135,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
 
     state(alignBehindBall)
     {
-      const Angle angleToGoal = calcAngleToGoal();
+      const Angle angleToGoal = calcAngleToDefendGoal();
 
       transition
       {
@@ -140,7 +154,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
 
     state(clearBall)
     {
-      const Angle angleToGoal = calcAngleToGoal();
+      const Angle angleToGoal = calcAngleToDefendGoal();
 
       transition
       {
@@ -151,6 +165,8 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
       action
       {
         theLookForwardSkill();
+        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        
         // Agrega aquí la lógica para despejar el balón hacia cualquier lado que no sea el arco propio
         // Puedes usar el skill correspondiente para realizar el despeje
         // Por ejemplo, theInWalkKickSkill o cualquier otro skill que sea adecuado
@@ -173,7 +189,7 @@ class KeeperClearBallCard : public KeeperClearBallCardBase
     }
   }
 
-  Angle calcAngleToGoal() const
+  Angle calcAngleToDefendGoal() const
   {
     return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline, 0.f)).angle();
   }
