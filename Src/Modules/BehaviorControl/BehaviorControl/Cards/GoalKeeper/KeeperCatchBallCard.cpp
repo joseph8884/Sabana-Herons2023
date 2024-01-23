@@ -10,6 +10,7 @@ CARD(KeeperCatchBallCard,{,
     CALLS(LookForward),
     CALLS(KeyFrameArms),
     CALLS(Stand),
+    CALLS(SpecialAction),
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
     REQUIRES(FieldDimensions),
     REQUIRES(RobotPose),
@@ -54,6 +55,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         }
         action{
           theLookForwardSkill();
+          theSpecialActionSkill(SpecialActionRequest::SpecialActionID::rightDive,false);
         }
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
