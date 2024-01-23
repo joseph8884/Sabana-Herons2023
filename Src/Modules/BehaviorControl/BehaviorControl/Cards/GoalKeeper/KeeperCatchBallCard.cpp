@@ -9,6 +9,7 @@ CARD(KeeperCatchBallCard,{,
     CALLS(Activity),//los llamados son para llamar todas las skills se hace por CALLS()
     CALLS(LookForward),
     CALLS(KeyFrameArms),
+    CALLS(Stand),
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
     REQUIRES(FieldDimensions),
     REQUIRES(RobotPose),
@@ -42,6 +43,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         action{
           theLookForwardSkill();
           theKeyFrameArmsSkill(ArmKeyFrameRequest::ArmKeyFrameId.back,false);
+          theStandSkill();
           //Lo que quieres que haga cuando la se llegue a este estado
         }
       }
