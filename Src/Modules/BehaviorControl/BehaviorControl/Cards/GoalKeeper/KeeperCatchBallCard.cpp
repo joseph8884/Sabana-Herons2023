@@ -55,7 +55,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         }
         action{
           theLookForwardSkill();
-          theSpecialActionSkill(SpecialActionRequest::SpecialActionID::rightDive,false);
+          theSpecialActionSkill(SpecialActionRequest::rightDive,false);
         }
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
