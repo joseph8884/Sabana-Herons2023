@@ -35,7 +35,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
     }
 
     option{
-      theActivitySkill(BehaviorStatus::unknown);
+      theActivitySkill(BehaviorStatus::KeeperCatchBallCard);
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)
