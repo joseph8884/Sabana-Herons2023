@@ -43,7 +43,6 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         }
         action{
           theLookForwardSkill();
-          theKeyFrameArmsSkill(ArmKeyFrameRequest::ArmKeyFrameId::back,false);
           theStandSkill();
           //Lo que quieres que haga cuando la se llegue a este estado
         }

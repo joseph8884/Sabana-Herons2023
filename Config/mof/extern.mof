@@ -10,6 +10,7 @@ transition playDead playDead start
 transition sitDown sitDown start
 transition standHigh standHigh start
 transition standHighLookUp standHighLookUp start
+transition rightDive rightDive start
 
 transition getUpEngineDummy getUpEngineDummy start
 

@@ -13,5 +13,4 @@ label repeat
 -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -   1  100
 
 transition rightDive rightDive repeat
-
 transition allMotions extern start
