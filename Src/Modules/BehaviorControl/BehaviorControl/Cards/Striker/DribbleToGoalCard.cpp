@@ -202,7 +202,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
       action
       {
         theLookForwardSkill();
-        thePathToTargetSkill(walkSpeed, StrikerPos);
+        /*thePathToTargetSkill(walkSpeed, StrikerPos);*/
 
       }
     }
