@@ -303,7 +303,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
       action
       {
         theLookForwardSkill();
-        theKickSkill((KickRequest::kickForwardFastLong), true,0.2f, false);
+        theKickSkill((KickRequest::kickForward), true,0.2f, false);
       }
     }
 
