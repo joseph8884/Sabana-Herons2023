@@ -27,7 +27,10 @@ STREAMABLE(BehaviorStatus, COMMA public BHumanMessageParticle<idBehaviorStatus>
     finished,
     initial,
     set,
-
+    
+    Striker,
+    
+    KeeperCatchBallCard,
     codeReleaseKickAtGoal,
     codeReleasePositionForKickOff,
     KeeperSearchForBallCard,
