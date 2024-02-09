@@ -35,6 +35,7 @@ STREAMABLE(BehaviorStatus, COMMA public BHumanMessageParticle<idBehaviorStatus>
     codeReleasePositionForKickOff,
     KeeperSearchForBallCard,
     KeeperClearBallCard,
+    BlindBallPointCard,
   });
 
   /**
