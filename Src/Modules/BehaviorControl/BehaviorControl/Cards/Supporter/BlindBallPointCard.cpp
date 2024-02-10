@@ -15,7 +15,6 @@ CARD(BlindBallPointCard,
 		CALLS(SpecialAction),
 
 		REQUIRES(TeamBallModel),
-		REQUIRES(SpecialActionRequest),
 		REQUIRES(RobotInfo),
 		REQUIRES(GameInfo),
 		REQUIRES(OwnTeamInfo),
