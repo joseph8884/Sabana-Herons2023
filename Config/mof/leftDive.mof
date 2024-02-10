@@ -13,5 +13,5 @@ label repeat
 
 -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -   1  100
 
-transition leftDive leftDive repea
+transition leftDive leftDive repeat
 transition allMotions extern start
