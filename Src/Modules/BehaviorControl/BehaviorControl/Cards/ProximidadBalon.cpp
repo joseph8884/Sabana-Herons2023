@@ -19,7 +19,7 @@ CARD(ProximidadBalonCard,{,
     }),
 }); 
 
-class ProximidadBalonCard : public ReturnToGoalCardBase
+class ProximidadBalonCard : public ProximidadBalonCardBase
 {
     bool preconditions() const override
     {
