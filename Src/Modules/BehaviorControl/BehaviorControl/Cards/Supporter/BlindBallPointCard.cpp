@@ -6,6 +6,8 @@
 #include "Representations/Communication/GameInfo.h"
 #include "Representations/Communication/RobotInfo.h"
 #include "Representations/Communication/TeamInfo.h"
+#include "Representations/Modeling/RobotPose.h"
+#include "Representations/BehaviorControl/FieldBall.h"
 
 #include <string>
 
@@ -13,14 +15,16 @@ CARD(BlindBallPointCard,
 	{ ,
 		CALLS(Activity),
 		CALLS(SpecialAction),
+		CALLS(LookForward),
 
 		REQUIRES(TeamBallModel),
 		REQUIRES(RobotInfo),
 		REQUIRES(GameInfo),
-		REQUIRES(OwnTeamInfo),
+		REQUIRES(RobotPose), 
+		REQUIRES(FieldBall),
 		DEFINES_PARAMETERS(
 		{,
-			(int)(1000) initialWaitTime = 1000
+			(int)(1000) initialWaitTime
   }),
 });
 
@@ -36,22 +40,28 @@ class BlindBallPointCard: public BlindBallPointCardBase{
     
     option{
 			theActivitySkill(BehaviorStatus::BlindBallPointCard);
-       initial_state(start)
+		initial_state(start)
   {
     transition
     {
-      if(state_time > 20000)
+      if(state_time > 1000)
         goto POINT;
 		}
 			action
 		{
-			Skills::LookForwardSkill();
+			theLookForwardSkill();
 			theSpecialActionSkill(SpecialActionRequest::standHigh);
 	}
       
     }
 	state(POINT)
 	{
+		transition
+		{
+				if (!theFieldBall.ballWasSeen(1000)) {
+					goto start;
+}
+		}
 		action
 		{
 				if(theTeamBallModel.position.y() > 0)
