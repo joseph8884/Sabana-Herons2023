@@ -9,13 +9,13 @@
 #include "Representations/Modeling/RobotPose.h"
 #include "Representations/BehaviorControl/FieldBall.h"
 
-#include <string>
 
 CARD(BlindBallPointCard,
 	{ ,
 		CALLS(Activity),
 		CALLS(SpecialAction),
 		CALLS(LookForward),
+		CALLS(Stand),
 
 		REQUIRES(TeamBallModel),
 		REQUIRES(RobotInfo),
@@ -24,7 +24,7 @@ CARD(BlindBallPointCard,
 		REQUIRES(FieldBall),
 		DEFINES_PARAMETERS(
 		{,
-			(int)(1000) initialWaitTime
+			(int)(1000) initialWaitTime,
   }),
 });
 
@@ -44,14 +44,14 @@ class BlindBallPointCard: public BlindBallPointCardBase{
   {
     transition
     {
-      if(state_time > 1000)
+      if(state_time > initialWaitTime)
         goto POINT;
 		}
 			action
 		{
 			theLookForwardSkill();
-			theSpecialActionSkill(SpecialActionRequest::standHigh);
-	}
+			theStandSkill();
+		}
       
     }
 	state(POINT)
@@ -59,7 +59,7 @@ class BlindBallPointCard: public BlindBallPointCardBase{
 		transition
 		{
 				if (!theFieldBall.ballWasSeen(1000)) {
-					goto start;
+					goto STAY;
 }
 		}
 		action
@@ -72,6 +72,20 @@ class BlindBallPointCard: public BlindBallPointCardBase{
 				{
 					theSpecialActionSkill(SpecialActionRequest::leftArm);
 			}
+		}
+	}
+	state(STAY)
+	{
+		transition
+		{
+				if (theFieldBall.ballWasSeen(1000)) {
+					goto POINT;
+}
+		}
+			action
+		{
+			theLookForwardSkill();
+			theStandSkill();
 		}
 	}
 }
