@@ -1,7 +1,7 @@
 #include "Representations/BehaviorControl/Skills.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 
-CARD(DefendGoalCard,
+CARD(ProximidadBalonCard,
 {,
   CALLS(Activity),
   CALLS(LookForward),
@@ -9,7 +9,7 @@ CARD(DefendGoalCard,
   CALLS(Stand),
 });
 
-class DefendGoalCard : public DefendGoalCardBase
+class ProximidadBalonCard : public DefendGoalCardBase
 {
   bool preconditions() const override
   {
@@ -31,4 +31,4 @@ class DefendGoalCard : public DefendGoalCardBase
   }
 };
 
-MAKE_CARD(DefendGoalCard);
+MAKE_CARD(ProximidadBalonCard);

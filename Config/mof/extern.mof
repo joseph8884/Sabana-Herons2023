@@ -11,6 +11,10 @@ transition sitDown sitDown start
 transition standHigh standHigh start
 transition standHighLookUp standHighLookUp start
 transition rightDive rightDive start
+transition leftDive leftDive start
+transition leftArm leftArm start
+transition rightArm rightArm start
+
 
 transition getUpEngineDummy getUpEngineDummy start
 

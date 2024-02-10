@@ -36,7 +36,7 @@ class BlindBallPointCard: public BlindBallPointCardBase{
     }
     
     option{
-			theActivitySkill(BehaviorStatus::BlindBallPoint);
+			theActivitySkill(BehaviorStatus::BlindBallPointCard);
        initial_state(start)
   {
     transition

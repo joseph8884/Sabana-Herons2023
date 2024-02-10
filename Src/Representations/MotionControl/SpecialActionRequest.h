@@ -23,7 +23,10 @@ STREAMABLE(SpecialActionRequest,
     standHigh,
     standHighLookUp,
     getUpEngineDummy,
-    rightDive, //used for debugging motion of getUpEngine
+    rightDive,
+    leftDive,
+    leftArm, 
+    rightArm, //used for debugging motion of getUpEngine
   });
 
   /**
