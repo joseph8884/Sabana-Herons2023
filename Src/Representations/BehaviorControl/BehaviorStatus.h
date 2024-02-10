@@ -36,6 +36,7 @@ STREAMABLE(BehaviorStatus, COMMA public BHumanMessageParticle<idBehaviorStatus>
     KeeperSearchForBallCard,
     KeeperClearBallCard,
     BlindBallPointCard,
+    DribbleToGoalCard,
     ProximidadBalonCard,
   });
 

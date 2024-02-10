@@ -66,7 +66,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
 
   option
   {
-    theActivitySkill(BehaviorStatus::Striker);
+    theActivitySkill(BehaviorStatus::DribbleToGoalCard);
 
     bool hayObstaculoCerca = false;
       if(!theObstacleModel.obstacles.empty()){     //Tenemos obstàculos, entonces, actuamos.   
@@ -202,7 +202,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
       action
       {
         theLookForwardSkill();
-        /*thePathToTargetSkill(walkSpeed, StrikerPos);*/
+        thePathToTargetSkill(walkSpeed, StrikerPos);
 
       }
     }
