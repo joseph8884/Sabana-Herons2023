@@ -1,7 +1,7 @@
 #include "Representations/BehaviorControl/Skills.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 
-CARD(ProximidadBalonCard,
+CARD(DefendGoalCard,
 {,
   CALLS(Activity),
   CALLS(LookForward),
@@ -9,7 +9,7 @@ CARD(ProximidadBalonCard,
   CALLS(Stand),
 });
 
-class ProximidadBalonCard : public DefendGoalCardBase
+class DefendGoalCard : public DefendGoalCardBase
 {
   bool preconditions() const override
   {
@@ -30,5 +30,4 @@ class ProximidadBalonCard : public DefendGoalCardBase
     theSaySkill("Please implement a behavior for me!");
   }
 };
-
-MAKE_CARD(ProximidadBalonCard);
+MAKE_CARD(DefendGoalCard);
