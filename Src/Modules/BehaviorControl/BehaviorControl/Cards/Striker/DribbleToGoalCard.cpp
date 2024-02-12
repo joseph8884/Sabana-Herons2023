@@ -37,7 +37,7 @@ CARD(DribbleToGoalCard,{,
     (int)(1000) initialWaitTime,
     (int)(6000) ballNotSeenTimeout,
     (Angle)(5_deg) ballAlignThreshold,
-    (float)(500.f) ballNearThreshold,
+    (float)(400.f) ballNearThreshold,
     (Angle)(10_deg) angleToGoalThreshold,
     (float)(400.f) ballAlignOffsetX,
     (float)(100.f) ballYThreshold,
@@ -109,7 +109,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
           goto giraCabezaDer;
         if(theFieldBall.positionRelative.norm() < 5000.0f)
           goto walkToBall;
-        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 200.f)
+        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 500.f)
           goto obsAvoid;
       }
       action 
@@ -133,7 +133,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
         //   goto receiveCentralPass;
         if(theFieldBall.ballWasSeen())
           goto turnToBall;
-        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 200.f)
+        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 500.f)
           goto obsAvoid;
       }
       action
@@ -157,7 +157,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
         //   goto receiveCentralPass;
         if(theFieldBall.ballWasSeen())
           goto turnToBall;
-        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 200.f)
+        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 500.f)
           goto obsAvoid;
       }
       action
@@ -180,8 +180,8 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto giraCabezaDer;
         if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold))
-          goto kickAtGoal;
-        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 200.f)
+          goto alignBehindBall;
+        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 500.f)
           goto obsAvoid;
       }
       action
@@ -191,6 +191,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
       }
     }
+    
 
     
 
@@ -220,26 +221,29 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
       }
     }
 */ 
-/*
+
     state(alignBehindBall)
     {
-      const Angle angleToGoal = calcAngleToGoal();
+      
 
       transition
       {
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto giraCabezaDer;
-        if(std::abs(angleToGoal) < angleToGoalThreshold && ballOffsetXRange.isInside(theFieldBall.positionRelative.x()) && ballOffsetYRange.isInside(theFieldBall.positionRelative.y()))
+        if(ballOffsetXRange.isInside(theFieldBall.positionRelative.x()) && ballOffsetYRange.isInside(theFieldBall.positionRelative.y()))
           goto kickAtGoal; 
+        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 500.f)
+          goto obsAvoid;
       }
       action
       {
         theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX-25.f, theFieldBall.positionRelative.y() - ballOffsetY));
+        theKeyFrameArmsSkill(ArmKeyFrameRequest::back,false);
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
       }
     }
 
-*/
+
     state(kickAtGoal)
     {
       bool hayObstaculos = hayObstaculo();
@@ -255,8 +259,9 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
       action
       {
         theLookForwardSkill();
+        theKeyFrameArmsSkill(ArmKeyFrameRequest::back,false);
         /*theKickSkill((KickRequest::kickForward), true,0.2f, false);*/
-        theInWalkKickSkill(WalkKickVariant(WalkKicks::Type::forward, Legs::Leg::right),Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX-25.f, theFieldBall.positionRelative.y() - ballOffsetY));
+        theInWalkKickSkill(WalkKickVariant(WalkKicks::Type::forward, Legs::Leg::right),Pose2f(0.f, theFieldBall.positionRelative.x() - ballOffsetX-25.f, theFieldBall.positionRelative.y() - ballOffsetY));
       }
     }
     state(obsAvoid)
@@ -271,7 +276,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
       action
       {
         for(const auto& obstacle : theObstacleModel.obstacles) {
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, obstacle.center.norm()+100)); 
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, obstacle.center.norm()+300)); 
         }
       }
     }

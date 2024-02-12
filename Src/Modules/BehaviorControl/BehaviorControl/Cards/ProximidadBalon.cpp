@@ -11,6 +11,7 @@ CARD(ProximidadBalonCard,{,
     CALLS(KeyFrameSingleArm),
     CALLS(Stand),
     CALLS(WalkAtRelativeSpeed),
+    CALLS(SpecialAction),
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
     REQUIRES(FieldDimensions),
     REQUIRES(RobotPose),
@@ -22,7 +23,7 @@ CARD(ProximidadBalonCard,{,
         (Angle)(5_deg) ballAlignThreshold,
         (int)(7000) ballNotSeenTimeout,
         (float)(0.3f) walkSpeed,
-        (float)(1500.f) ballNearToMeThreshold,
+        (float)(500.f) ballNearToMeThreshold,
     }),
 }); 
 
@@ -43,10 +44,9 @@ class ProximidadBalonCard : public ProximidadBalonCardBase
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)
-            goto searchForBall;//Aca es el cambio de escenads
+            goto waitToBall;//Aca es el cambio de escenads
         }
         action{
-          theLookForwardSkill();
           theStandSkill();
           //Lo que quieres que haga cuando la se llegue a este estado
         }
@@ -61,7 +61,6 @@ class ProximidadBalonCard : public ProximidadBalonCardBase
 
       action
       {
-        theLookForwardSkill();
         theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
       }
     }
@@ -83,25 +82,23 @@ class ProximidadBalonCard : public ProximidadBalonCardBase
     state(waitToBall){
         transition{
           if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))//Hacer la condicion de que vaya a caminar solo si esta dentro del area.
-            goto searchForBall;
+            goto start;
           if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearToMeThreshold))//crear la condicion para saber si el balon esta cerca o no, si esta cerca que vaya a por ella, si no que espere
             goto raiseHand;
         }
         action{
-          theLookForwardSkill();
-          theStandSkill();
+                    theStandSkill();
         }
       }
       state(raiseHand){
         transition{
             if(theFieldBall.positionRelative.squaredNorm() > sqr(ballNearToMeThreshold))//crear la condicion para saber si el balon esta cerca o no, si esta cerca que vaya a por ella, si no que espere
               goto waitToBall;
-            if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))//Hacer la condicion de que vaya a caminar solo si esta dentro del area.
-              goto searchForBall;
+            if(!theFieldBall.ballWasSeen(2000))//Hacer la condicion de que vaya a caminar solo si esta dentro del area.
+              goto start;
         }
         action{
-          theLookForwardSkill();
-          theKeyFrameSingleArmSkill(ArmKeyFrameRequest::back, Arms::right, false);
+          theSpecialActionSkill(SpecialActionRequest::rightArm);
         }
       }
       //CRear los estados que sean necesarios, debe ser ciclico en la mayoria de casos.
