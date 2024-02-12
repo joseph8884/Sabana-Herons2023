@@ -25,7 +25,8 @@ STREAMABLE(SpecialActionRequest,
     getUpEngineDummy,
     rightDive,
     leftDive,
-    leftArm, 
+    leftArm,
+    preventBall,
     rightArm, //used for debugging motion of getUpEngine
   });
 

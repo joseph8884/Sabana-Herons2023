@@ -152,13 +152,16 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
       {
         if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
+          /*
         if ((theFieldBall.positionOnField.x() < theFieldDimensions.xPosOwnPenaltyArea && (theFieldDimensions.yPosLeftPenaltyArea) > theFieldBall.positionOnField.y() > (theFieldDimensions.yPosLeftPenaltyArea)) || theFieldBall.positionRelative.norm() <= 1400)
           goto despeje;
-
-        if (theFieldBall.positionOnField.y() > theFieldDimensions.yPosCenterGoal + 600 && theRobotPose.translation.y() > 605 /*(theFieldDimensions.yPosLeftGoal - 200) */) // Goes over left
+          */
+        /*
+        if (theFieldBall.positionOnField.y() > theFieldDimensions.yPosCenterGoal + 600 && theRobotPose.translation.y() > 605 /*(theFieldDimensions.yPosLeftGoal - 200) ) // Goes over left
           goto posLeft;
-        if (theFieldBall.positionOnField.y() < theFieldDimensions.yPosCenterGoal - 600 && theRobotPose.translation.y() < -605 /* theRobotPose.translation.y() > 370 (theFieldDimensions.yPosLeftGoal - 200) */) // Goes over left
+        if (theFieldBall.positionOnField.y() < theFieldDimensions.yPosCenterGoal - 600 && theRobotPose.translation.y() < -605 /* theRobotPose.translation.y() > 370 (theFieldDimensions.yPosLeftGoal - 200) ) // Goes over left
           goto posRight;
+        */
         if (std::abs(theFieldBall.positionOnField.y()) <= 600)
           goto posMid;
         if (theFieldBall.positionOnField.x() >= theFieldDimensions.xPosHalfWayLine)
@@ -169,6 +172,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         theLookAtAnglesSkill(theFieldBall.positionRelative.angle(), 2);
       }
     }
+    /*
     state(posRight)
     {
       const Angle angleToGoal = calcAngleToGoal();
@@ -199,6 +203,8 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         theLookAtAnglesSkill(theFieldBall.positionRelative.angle(), 2);
       }
     }
+    */
+   /*
     state(posLeft)
     {
       const Angle angleToGoal = calcAngleToGoal();
@@ -229,14 +235,17 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         theLookAtAnglesSkill(theFieldBall.positionRelative.angle(), 2);
       }
     }
+    */
     state(posMid)
     {
       transition
       {
         if (theFieldBall.positionOnField.x() >= theFieldDimensions.xPosHalfWayLine || theFieldBall.positionOnField.y() < -600 || theFieldBall.positionOnField.y() > 600)
           goto defensive;
+        /*
         if ((theFieldBall.positionOnField.x() < theFieldDimensions.xPosOwnPenaltyArea && (theFieldDimensions.yPosLeftPenaltyArea) > theFieldBall.positionOnField.y() > (theFieldDimensions.yPosLeftPenaltyArea)) || theFieldBall.positionRelative.norm() <= 1400)
           goto despeje;
+        */
         if (!theFieldBall.ballWasSeen(6000))
           goto searchForBall;
 
@@ -309,9 +318,10 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         // theSaySkill("Go Down"); // CAMBIAR POR SPECIAL ACTION
         theLookForwardSkill();
         theStandSkill();
-        /***theSpecialActionSkill(SpecialActionRequest::preventBall);***/
+        theSpecialActionSkill(SpecialActionRequest::preventBall);
       }
     }
+    /*
     state(despeje)
     {
       transition
@@ -340,6 +350,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
           theLookAtAnglesSkill(theFieldBall.positionRelative.angle(), 1.7f);
       }
     }
+    */
     state(kick)
     {
       const Angle angleToGoal = calcAngleToGoal();
