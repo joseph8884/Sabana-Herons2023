@@ -4,6 +4,8 @@
 #include "Representations/Modeling/RobotPose.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 #include "Tools/BehaviorControl/Framework/Card/CabslCard.h"
+#include "Representations/Modeling/TeamBallModel.h"
+#include "Representations/Communication/RobotInfo.h"
 
 CARD(ReturnToGoalCard,{,
     CALLS(Activity),//los llamados son para llamar todas las skills se hace por CALLS()
@@ -11,6 +13,8 @@ CARD(ReturnToGoalCard,{,
     REQUIRES(FieldBall),//Llama a los representaciones que necesita, siempre se usan estas por lo general
     REQUIRES(FieldDimensions),
     REQUIRES(RobotPose),
+    REQUIRES(RobotInfo),
+    REQUIRES(TeamBallModel),
     DEFINES_PARAMETERS( 
     //Aca son todas las variables que se quiera definir para despues usarse dentro de la clase
     {,//Mirar cuales sirven y cuales no
@@ -21,18 +25,17 @@ CARD(ReturnToGoalCard,{,
 
 class ReturnToGoalCard : public ReturnToGoalCardBase
 {
-    bool preconditions() const override
+   bool preconditions() const override
     {
-        return true;
+        return theRobotInfo.number == 2;
     }
-
-    bool postconditions() const override
+   bool postconditions() const override
     {
-        return true;
+        return theRobotInfo.number != 2;
     }
 
     option{
-      theActivitySkill(BehaviorStatus::unknown);
+      theActivitySkill(BehaviorStatus::ReturnToGoalCard);
       initial_state(start){
         transition{
           if(state_time > initialWaitTime)
