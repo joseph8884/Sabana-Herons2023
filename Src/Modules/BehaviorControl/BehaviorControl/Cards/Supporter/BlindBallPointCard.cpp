@@ -66,30 +66,27 @@ class BlindBallPointCard : public BlindBallPointCardBase
 				if (!theFieldBall.ballWasSeen(1000))
 				{
 					goto STAY;
-				}
-			}
-			action
-			{
-				for (auto const &teammate : theTeamData.teammates)
-				{
-					if (theFrameInfo.getTimeSince(teammate.theBallModel.timeWhenLastSeen) <= 4000)
-					{
-						if (theRobotInfo.number == 3)
-							theSpecialActionSkill(SpecialActionRequest::rightArm);
-					}
-					else
-					{
-						theLookForwardSkill();
-					}
-				}
-			}
+}
 		}
-		state(STAY)
+		action
 		{
-			transition
-			{
-				if (theFieldBall.ballWasSeen(1000))
-				{
+			for(auto const& teammate : theTeamData.teammates){
+				if(teammate.isPenalized){
+					if(teammate.number==1){
+						if(theRobotInfo.number==3){
+							theSpecialActionSkill(SpecialActionRequest::rightArm);
+						}
+					}
+				}
+			}
+				
+		}
+	}
+	state(STAY)
+	{
+		transition
+		{
+				if (theFieldBall.ballWasSeen(1000)) {
 					goto POINT;
 				}
 			}
