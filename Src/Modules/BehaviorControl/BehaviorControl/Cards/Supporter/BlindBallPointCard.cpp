@@ -31,11 +31,11 @@ CARD(BlindBallPointCard,
 class BlindBallPointCard: public BlindBallPointCardBase{
    bool preconditions() const override
     {
-        return theRobotInfo.number == 3;
+		 return true;
     }
    bool postconditions() const override
     {
-        return theRobotInfo.number != 3;
+		 return true;
     }
     
     option{
@@ -64,14 +64,20 @@ class BlindBallPointCard: public BlindBallPointCardBase{
 		}
 		action
 		{
-				if(theTeamBallModel.position.y() > 0)
+			if(theRobotInfo.number==3){
+				if (theTeamBallModel.position.y() > 0)
 				{
 					theSpecialActionSkill(SpecialActionRequest::rightArm);
 				}
 				else
 				{
 					theSpecialActionSkill(SpecialActionRequest::leftArm);
+				}
 			}
+			else {
+				theLookForwardSkill();
+			}
+				
 		}
 	}
 	state(STAY)
