@@ -33,7 +33,7 @@ CARD(DribbleToGoalCard,{,
   
   DEFINES_PARAMETERS(
   {,
-    (float)(0.7f) walkSpeed,
+    (float)(0.5f) walkSpeed,
     (int)(1000) initialWaitTime,
     (int)(6000) ballNotSeenTimeout,
     (Angle)(5_deg) ballAlignThreshold,
@@ -109,6 +109,8 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
           goto giraCabezaDer;
         if(theFieldBall.positionRelative.norm() < 5000.0f)
           goto walkToBall;
+        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 200.f)
+          goto obsAvoid;
       }
       action 
       {
@@ -131,6 +133,8 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
         //   goto receiveCentralPass;
         if(theFieldBall.ballWasSeen())
           goto turnToBall;
+        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 200.f)
+          goto obsAvoid;
       }
       action
       {
@@ -153,6 +157,8 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
         //   goto receiveCentralPass;
         if(theFieldBall.ballWasSeen())
           goto turnToBall;
+        if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 200.f)
+          goto obsAvoid;
       }
       action
       {
@@ -174,13 +180,14 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto giraCabezaDer;
         if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold))
-          goto alignToGoal;
+          goto kickAtGoal;
         if(hayObstaculoCerca && theFieldBall.positionOnField.norm() > 200.f)
           goto obsAvoid;
       }
       action
       {
         theLookForwardSkill();
+        theKeyFrameArmsSkill(ArmKeyFrameRequest::back,false);
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
       }
     }
@@ -188,7 +195,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
     
 
 
-
+/*
     state(alignToGoal)
     {
       const Angle angleToGoal = calcAngleToGoal();
@@ -202,7 +209,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
         /*if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold && hayObstaculos && random == 0)
           //goto alignRight;
         if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold && hayObstaculos && random == 1)
-          goto alignLeft;*/
+          goto alignLeft;
         if(std::abs(angleToGoal) < angleToGoalThresholdPrecise && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold )
           goto alignBehindBall;
       }
@@ -212,7 +219,8 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
         theWalkToTargetSkill(Pose2f(walkSpeed + 0.2f, walkSpeed + 0.2f, walkSpeed + 0.2f), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
       }
     }
- 
+*/ 
+/*
     state(alignBehindBall)
     {
       const Angle angleToGoal = calcAngleToGoal();
@@ -231,7 +239,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
       }
     }
 
-
+*/
     state(kickAtGoal)
     {
       bool hayObstaculos = hayObstaculo();
@@ -242,8 +250,7 @@ class DribbleToGoalCard : public DribbleToGoalCardBase
           goto start;
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto giraCabezaDer;
-        if(!hayObstaculos && theFieldBall.ballWasSeen(1000))
-          goto alignToGoal;
+        
       }
       action
       {
