@@ -18,6 +18,7 @@
 #include "Representations/Perception/FieldPercepts/FieldLineIntersections.h"
 #include "Representations/Perception/FieldPercepts/FieldLines.h"
 #include "Representations/Perception/ImagePreprocessing/CameraMatrix.h"
+#include "Tools/Math/BHMath.h"
 #include "Tools/Module/Module.h"
 
 MODULE(MidCirclePerceptor,
