@@ -58,14 +58,16 @@ class BlindBallPointCard : public BlindBallPointCardBase
 				theStandSkill();
 			}
 		}
-
-		state(POINT)
+      
+    }
+	state(POINT)
+	{
+		transition
 		{
-			transition
-			{
-				if (!theFieldBall.ballWasSeen(1000))
-				{
+			for(auto const& teammate : theTeamData.teammates){
+				if (!teammate.isPenalized) {
 					goto STAY;
+				}
 }
 		}
 		action
@@ -86,10 +88,12 @@ class BlindBallPointCard : public BlindBallPointCardBase
 	{
 		transition
 		{
-				if (theFieldBall.ballWasSeen(1000)) {
+			for(auto const& teammate : theTeamData.teammates){
+				if (!teammate.isPenalized) {
 					goto POINT;
 				}
-			}
+}
+		}
 			action
 			{
 				theLookForwardSkill();
