@@ -162,10 +162,12 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         if (theFieldBall.positionOnField.y() < theFieldDimensions.yPosCenterGoal - 600 && theRobotPose.translation.y() < -605 /* theRobotPose.translation.y() > 370 (theFieldDimensions.yPosLeftGoal - 200) ) // Goes over left
           goto posRight;
         */
-        if (std::abs(theFieldBall.positionOnField.y()) <= 600)
-          goto posMid;
-        if (theFieldBall.positionOnField.x() >= theFieldDimensions.xPosHalfWayLine)
-          goto lookout;
+        if (100 > theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+          goto GoalRiskRight;
+        if (-100 < theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+          goto GoalRiskLeft;
+        if (-100 < theBallModel.estimate.position.y() && theBallModel.estimate.position.y() < 100 && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+          goto goDown;
       }
       action
       {
@@ -236,6 +238,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
       }
     }
     */
+   /*
     state(posMid)
     {
       transition
@@ -245,7 +248,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         /*
         if ((theFieldBall.positionOnField.x() < theFieldDimensions.xPosOwnPenaltyArea && (theFieldDimensions.yPosLeftPenaltyArea) > theFieldBall.positionOnField.y() > (theFieldDimensions.yPosLeftPenaltyArea)) || theFieldBall.positionRelative.norm() <= 1400)
           goto despeje;
-        */
+        
         if (!theFieldBall.ballWasSeen(6000))
           goto searchForBall;
 
@@ -274,6 +277,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         theLookAtAnglesSkill(theFieldBall.positionRelative.angle(), 1.7f);
       }
     }
+    */
     state(GoalRiskRight)
     {
       transition
@@ -351,6 +355,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
       }
     }
     */
+   /*
     state(kick)
     {
       const Angle angleToGoal = calcAngleToGoal();
@@ -366,6 +371,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
       }
     }
+    */
     state(lookout)
     {
       transition
