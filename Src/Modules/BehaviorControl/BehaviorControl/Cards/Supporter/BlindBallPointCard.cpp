@@ -8,6 +8,7 @@
 #include "Representations/Communication/TeamInfo.h"
 #include "Representations/Modeling/RobotPose.h"
 #include "Representations/BehaviorControl/FieldBall.h"
+#include "Representations/Communication/TeamData.h"
 
 
 CARD(BlindBallPointCard,
@@ -22,6 +23,7 @@ CARD(BlindBallPointCard,
 		REQUIRES(GameInfo),
 		REQUIRES(RobotPose), 
 		REQUIRES(FieldBall),
+		REQUIRES(TeamData),
 		DEFINES_PARAMETERS(
 		{,
 			(int)(1000) initialWaitTime,
@@ -64,18 +66,14 @@ class BlindBallPointCard: public BlindBallPointCardBase{
 		}
 		action
 		{
-			if(theRobotInfo.number==3){
-				if (theTeamBallModel.position.y() > 0)
-				{
-					theSpecialActionSkill(SpecialActionRequest::rightArm);
+			for(auto const& teammate : theTeamData.teammates){
+				if(teammate.isPenalized){
+					if(teammate.number==1){
+						if(theRobotInfo.number==3){
+							theSpecialActionSkill(SpecialActionRequest::rightArm);
+						}
+					}
 				}
-				else
-				{
-					theSpecialActionSkill(SpecialActionRequest::leftArm);
-				}
-			}
-			else {
-				theLookForwardSkill();
 			}
 				
 		}
