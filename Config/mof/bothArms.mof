@@ -9,5 +9,5 @@ stiffness 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 10
 label repeat
   -0.5    2.3   20.0   10.1  -90.0   -8.2  -90.0   0.0    20.0   -10.0   89.8    8.4   90.0    0.0    0.0    0.0  -21.3   48.9  -27.6    0.1    0.0    0.0  -21.2   49.0  -27.6    0.0   1 1500
 
-transition rightArm rightArm repeat
+transition bothArms bothArms repeat
 transition allMotions extern start
