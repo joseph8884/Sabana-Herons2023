@@ -15,6 +15,7 @@ transition leftDive leftDive start
 transition leftArm leftArm start
 transition rightArm rightArm start
 transition preventBall preventBall start
+transition bothArms bothArms start
 
 transition getUpEngineDummy getUpEngineDummy start
 
