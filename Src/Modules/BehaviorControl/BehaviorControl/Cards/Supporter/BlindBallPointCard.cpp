@@ -62,7 +62,7 @@ state(POINT)
 	transition
 	{
 			for (auto const& teammate : theTeamData.teammates) {
-				if (!teammate.isPenalized) {
+				if(teammate.isPenalized){
 					goto STAY;
 				}
 			}
@@ -81,6 +81,9 @@ state(POINT)
 							theSpecialActionSkill(SpecialActionRequest::leftArm);
 						}
 					}
+				} else {
+					theLookForwardSkill();
+					theStandSkill();
 				}
 			}
 		}
@@ -90,7 +93,7 @@ state(POINT)
 		transition
 		{
 			for (auto const& teammate : theTeamData.teammates) {
-				if (!teammate.isPenalized) {
+				if (teammate.isPenalized) {
 					goto POINT;
 				}
 			}
