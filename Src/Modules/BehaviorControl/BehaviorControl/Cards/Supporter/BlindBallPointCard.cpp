@@ -11,28 +11,27 @@
 #include "Representations/Communication/TeamData.h"
 #include "Representations/Infrastructure/FrameInfo.h"
 
-CARD(BlindBallPointCard,{,
-		 CALLS(Activity),
-		 CALLS(SpecialAction),
-		 CALLS(LookForward),
-		 CALLS(Stand),
+CARD(BlindBallPointCard,
+	{ ,
+		CALLS(Activity),
+		CALLS(SpecialAction),
+		CALLS(LookForward),
+		CALLS(Stand),
 
-		 REQUIRES(TeamBallModel),
-		 REQUIRES(RobotInfo),
-		 REQUIRES(GameInfo),
-		 REQUIRES(RobotPose),
-		 REQUIRES(FieldBall),
-		 REQUIRES(TeamData),
-		 REQUIRES(FrameInfo),
+		REQUIRES(TeamBallModel),
+		REQUIRES(RobotInfo),
+		REQUIRES(GameInfo),
+		REQUIRES(RobotPose),
+		REQUIRES(FieldBall),
+		REQUIRES(TeamData),
+		REQUIRES(FrameInfo),
 		DEFINES_PARAMETERS(
-			{
-				,
-				(int)(1000)initialWaitTime,
-			}),
-	 });
+		{,
+			(int)(1000) initialWaitTime,
+	}),
+	});
 
-class BlindBallPointCard : public BlindBallPointCardBase
-{
+class BlindBallPointCard : public BlindBallPointCardBase {
 	bool preconditions() const override
 	{
 		return true;
@@ -42,65 +41,66 @@ class BlindBallPointCard : public BlindBallPointCardBase
 		return true;
 	}
 
-	option
-	{
+	option{
 		theActivitySkill(BehaviorStatus::BlindBallPointCard);
-		initial_state(start)
-		{
-			transition
-			{
-				if (state_time > initialWaitTime)
-					goto POINT;
-			}
-			action
-			{
-				theLookForwardSkill();
-				theStandSkill();
-			}
-		}
-      
-    }
-	state(POINT)
+	initial_state(start)
+{
+	transition
 	{
-		transition
-		{
-			for(auto const& teammate : theTeamData.teammates){
+		if (state_time > initialWaitTime)
+			goto POINT;
+	}
+		action
+	{
+		theLookForwardSkill();
+		theStandSkill();
+	}
+
+	}
+state(POINT)
+{
+	transition
+	{
+			for (auto const& teammate : theTeamData.teammates) {
 				if (!teammate.isPenalized) {
 					goto STAY;
 				}
-}
-		}
+			}
+	}
 		action
 		{
-			for(auto const& teammate : theTeamData.teammates){
-				if(teammate.isPenalized){
-					if(teammate.number==1){
-						if(theRobotInfo.number==3){
+			for (auto const& teammate : theTeamData.teammates) {
+				if (teammate.isPenalized) {
+					if (teammate.number == 1) {
+						if (theRobotInfo.number == 3) {
 							theSpecialActionSkill(SpecialActionRequest::rightArm);
+						}
+					}
+					else if (teammate.number == 2) {
+						if (theRobotInfo.number == 3) {
+							theSpecialActionSkill(SpecialActionRequest::leftArm);
 						}
 					}
 				}
 			}
-				
 		}
 	}
 	state(STAY)
 	{
 		transition
 		{
-			for(auto const& teammate : theTeamData.teammates){
+			for (auto const& teammate : theTeamData.teammates) {
 				if (!teammate.isPenalized) {
 					goto POINT;
 				}
-}
-		}
-			action
-			{
-				theLookForwardSkill();
-				theStandSkill();
 			}
 		}
+			action
+		{
+				theLookForwardSkill();
+				theStandSkill();
+		}
+	}
 	}
 };
-
 MAKE_CARD(BlindBallPointCard);
