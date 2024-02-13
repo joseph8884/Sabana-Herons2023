@@ -34,7 +34,7 @@ CARD(KeeperCatchBallCard, {
                                       ,
                                       (float)(0.8f)walkSpeed,
                                       (int)(1000)initialWaitTime,
-                                      (int)(7000)ballNotSeenTimeout,
+                                      (int)(5000)ballNotSeenTimeout,
                                       (Angle)(7_deg)ballAlignThreshold,
                                       (float)(500.f)ballNearThreshold,
                                       (Angle)(10_deg)angleToGoalThreshold,
@@ -60,14 +60,13 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
 {
   bool preconditions() const override
   {
-    return true;
+    return theRobotInfo.number == 1;
   }
 
   bool postconditions() const override
   {
-    return true;
+    return theRobotInfo.number != 1;
   }
-
   option
   {
     theActivitySkill(BehaviorStatus::KeeperCatchBallCard);
@@ -83,19 +82,6 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
         theLookForwardSkill();
         theStandSkill();
         // Lo que quieres que haga cuando la se llegue a este estado
-      }
-    }
-    state(siguienteBloque)
-    {
-      transition
-      {
-        if (true)     // Condicion para que pase al siguiente bloque
-          goto start; // siguiente bloque
-      }
-      action
-      {
-        theLookForwardSkill();
-        theSpecialActionSkill(SpecialActionRequest::rightDive, false);
       }
     }
 
@@ -129,6 +115,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
       {
         theLookAtAnglesSkill(-1, 1.5f, 0.8f);
         theStandSkill();
+        theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
       }
     }
     state(lookRight)
@@ -152,22 +139,22 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
       {
         if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
-          /*
-        if ((theFieldBall.positionOnField.x() < theFieldDimensions.xPosOwnPenaltyArea && (theFieldDimensions.yPosLeftPenaltyArea) > theFieldBall.positionOnField.y() > (theFieldDimensions.yPosLeftPenaltyArea)) || theFieldBall.positionRelative.norm() <= 1400)
-          goto despeje;
-          */
+        /*
+      if ((theFieldBall.positionOnField.x() < theFieldDimensions.xPosOwnPenaltyArea && (theFieldDimensions.yPosLeftPenaltyArea) > theFieldBall.positionOnField.y() > (theFieldDimensions.yPosLeftPenaltyArea)) || theFieldBall.positionRelative.norm() <= 1400)
+        goto despeje;
+        */
         /*
         if (theFieldBall.positionOnField.y() > theFieldDimensions.yPosCenterGoal + 600 && theRobotPose.translation.y() > 605 /*(theFieldDimensions.yPosLeftGoal - 200) ) // Goes over left
           goto posLeft;
         if (theFieldBall.positionOnField.y() < theFieldDimensions.yPosCenterGoal - 600 && theRobotPose.translation.y() < -605 /* theRobotPose.translation.y() > 370 (theFieldDimensions.yPosLeftGoal - 200) ) // Goes over left
           goto posRight;
         */
+        if ((theBallModel.estimate.position.y() > -100 && theBallModel.estimate.position.y() < 100) && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+          goto goDown;
         if (100 > theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
           goto GoalRiskRight;
-        if (-100 < theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+        if (-100 < theBallModel.estimate.position.y()  && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
           goto GoalRiskLeft;
-        if (-100 < theBallModel.estimate.position.y() && theBallModel.estimate.position.y() < 100 && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
-          goto goDown;
       }
       action
       {
@@ -206,78 +193,78 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
       }
     }
     */
-   /*
-    state(posLeft)
-    {
-      const Angle angleToGoal = calcAngleToGoal();
-      transition
-      {
-        if (theFieldBall.positionOnField.x() >= theFieldDimensions.xPosHalfWayLine || theFieldBall.positionOnField.y() <= theFieldDimensions.yPosCenterGoal + 600)
-          goto defensive;
-        if ((theFieldBall.positionOnField.x() < theFieldDimensions.xPosOwnPenaltyArea && (theFieldDimensions.yPosLeftPenaltyArea) > theFieldBall.positionOnField.y() > (theFieldDimensions.yPosLeftPenaltyArea)) || theFieldBall.positionRelative.norm() <= 1400)
-          goto despeje;
-        if (!theFieldBall.ballWasSeen(6000))
-          goto searchForBall;
+    /*
+     state(posLeft)
+     {
+       const Angle angleToGoal = calcAngleToGoal();
+       transition
+       {
+         if (theFieldBall.positionOnField.x() >= theFieldDimensions.xPosHalfWayLine || theFieldBall.positionOnField.y() <= theFieldDimensions.yPosCenterGoal + 600)
+           goto defensive;
+         if ((theFieldBall.positionOnField.x() < theFieldDimensions.xPosOwnPenaltyArea && (theFieldDimensions.yPosLeftPenaltyArea) > theFieldBall.positionOnField.y() > (theFieldDimensions.yPosLeftPenaltyArea)) || theFieldBall.positionRelative.norm() <= 1400)
+           goto despeje;
+         if (!theFieldBall.ballWasSeen(6000))
+           goto searchForBall;
 
-        if (100 > theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
-          goto GoalRiskRight;
-        if (-100 < theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
-          goto GoalRiskLeft;
-        if (-100 < theBallModel.estimate.position.y() && theBallModel.estimate.position.y() < 100 && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
-          goto goDown;
-      }
-      action
-      {
-        if (theRobotPose.translation.y() > 450)
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, 0.f, -200));
-        if (theRobotPose.translation.x() < theFieldDimensions.xPosOwnGroundline + 150)
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 200, 0.f));
-        if (std::abs(theRobotPose.translation.y()) <= 450)
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, theFieldBall.positionRelative.y()));
-        theLookAtAnglesSkill(theFieldBall.positionRelative.angle(), 2);
-      }
-    }
-    */
-   /*
-    state(posMid)
-    {
-      transition
-      {
-        if (theFieldBall.positionOnField.x() >= theFieldDimensions.xPosHalfWayLine || theFieldBall.positionOnField.y() < -600 || theFieldBall.positionOnField.y() > 600)
-          goto defensive;
-        /*
-        if ((theFieldBall.positionOnField.x() < theFieldDimensions.xPosOwnPenaltyArea && (theFieldDimensions.yPosLeftPenaltyArea) > theFieldBall.positionOnField.y() > (theFieldDimensions.yPosLeftPenaltyArea)) || theFieldBall.positionRelative.norm() <= 1400)
-          goto despeje;
-        
-        if (!theFieldBall.ballWasSeen(6000))
-          goto searchForBall;
+         if (100 > theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+           goto GoalRiskRight;
+         if (-100 < theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+           goto GoalRiskLeft;
+         if (-100 < theBallModel.estimate.position.y() && theBallModel.estimate.position.y() < 100 && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+           goto goDown;
+       }
+       action
+       {
+         if (theRobotPose.translation.y() > 450)
+           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, 0.f, -200));
+         if (theRobotPose.translation.x() < theFieldDimensions.xPosOwnGroundline + 150)
+           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 200, 0.f));
+         if (std::abs(theRobotPose.translation.y()) <= 450)
+           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, theFieldBall.positionRelative.y()));
+         theLookAtAnglesSkill(theFieldBall.positionRelative.angle(), 2);
+       }
+     }
+     */
+    /*
+     state(posMid)
+     {
+       transition
+       {
+         if (theFieldBall.positionOnField.x() >= theFieldDimensions.xPosHalfWayLine || theFieldBall.positionOnField.y() < -600 || theFieldBall.positionOnField.y() > 600)
+           goto defensive;
+         /*
+         if ((theFieldBall.positionOnField.x() < theFieldDimensions.xPosOwnPenaltyArea && (theFieldDimensions.yPosLeftPenaltyArea) > theFieldBall.positionOnField.y() > (theFieldDimensions.yPosLeftPenaltyArea)) || theFieldBall.positionRelative.norm() <= 1400)
+           goto despeje;
 
-        if (100 > theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
-          goto GoalRiskRight;
-        if (-100 < theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
-          goto GoalRiskLeft;
-        if (-100 < theBallModel.estimate.position.y() && theBallModel.estimate.position.y() < 100 && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
-          goto goDown;
-      }
-      action
-      {
-        if (std::abs(theRobotPose.translation.y()) <= 450)
-        {
-          if (theFieldBall.positionRelative.y() < 0)
-            theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, -300.f));
-          if (theFieldBall.positionRelative.y() > 0)
-            theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, 300.01f));
-        }
-        if (theRobotPose.translation.y() > 450)
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, -200));
-        if (theRobotPose.translation.y() < -450)
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, 200));
-        if (theRobotPose.translation.x() < theFieldDimensions.xPosOwnGroundline + 150)
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 200, 0.f));
-        theLookAtAnglesSkill(theFieldBall.positionRelative.angle(), 1.7f);
-      }
-    }
-    */
+         if (!theFieldBall.ballWasSeen(6000))
+           goto searchForBall;
+
+         if (100 > theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+           goto GoalRiskRight;
+         if (-100 < theBallModel.estimate.position.y() && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+           goto GoalRiskLeft;
+         if (-100 < theBallModel.estimate.position.y() && theBallModel.estimate.position.y() < 100 && theFieldBall.endPositionRelative.x() < 0 && theBallModel.estimate.velocity.x() < -90)
+           goto goDown;
+       }
+       action
+       {
+         if (std::abs(theRobotPose.translation.y()) <= 450)
+         {
+           if (theFieldBall.positionRelative.y() < 0)
+             theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, -300.f));
+           if (theFieldBall.positionRelative.y() > 0)
+             theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, 300.01f));
+         }
+         if (theRobotPose.translation.y() > 450)
+           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, -200));
+         if (theRobotPose.translation.y() < -450)
+           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 0.f, 200));
+         if (theRobotPose.translation.x() < theFieldDimensions.xPosOwnGroundline + 150)
+           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 200, 0.f));
+         theLookAtAnglesSkill(theFieldBall.positionRelative.angle(), 1.7f);
+       }
+     }
+     */
     state(GoalRiskRight)
     {
       transition
@@ -330,7 +317,7 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
     {
       transition
       {
-        
+
         if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
         if (theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold) && ballOffsetXRange.isInside(theFieldBall.positionRelative.x()) && ballOffsetYRange.isInside(theFieldBall.positionRelative.y()))
@@ -355,23 +342,23 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
       }
     }
     */
-   /*
-    state(kick)
-    {
-      const Angle angleToGoal = calcAngleToGoal();
-      transition
-      {
-        if (state_time > maxKickWaitTime || (state_time > minKickWaitTime && theInWalkKickSkill.isDone()))
-          goto checkBall;
-      }
+    /*
+     state(kick)
+     {
+       const Angle angleToGoal = calcAngleToGoal();
+       transition
+       {
+         if (state_time > maxKickWaitTime || (state_time > minKickWaitTime && theInWalkKickSkill.isDone()))
+           goto checkBall;
+       }
 
-      action
-      {
-        theLookForwardSkill();
-        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
-      }
-    }
-    */
+       action
+       {
+         theLookForwardSkill();
+         theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+       }
+     }
+     */
     state(lookout)
     {
       transition
