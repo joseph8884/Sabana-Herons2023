@@ -20,6 +20,7 @@ CARD(FuerzaPatadaCard,
   CALLS(LookForward),
   CALLS(Stand),
   CALLS(Kick),
+  CALLS(Say),
   CALLS(WalkAtRelativeSpeed),
   CALLS(WalkToTarget),
   REQUIRES(FieldBall),
@@ -46,7 +47,7 @@ CARD(FuerzaPatadaCard,
 });
 
 
-class FuerzaPatadaCard : public FuerzaPatadaCard
+class FuerzaPatadaCard : public FuerzaPatadaCardBase
 {
 
     bool preconditions() const override
