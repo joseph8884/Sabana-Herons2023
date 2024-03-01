@@ -3,9 +3,8 @@ ctrl_interface_group=0
 ap_scan=1
 
 network={
-  ssid="naoprueba"
-  proto=RSN
-  scan_ssid=0
+  ssid="SabanaHeron"
+  scan_ssid=1
   key_mgmt=WPA-PSK
   pairwise=TKIP CCMP
   group=TKIP CCMP

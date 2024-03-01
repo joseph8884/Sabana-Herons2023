@@ -60,12 +60,12 @@ class KeeperCatchBallCard : public KeeperCatchBallCardBase
 {
   bool preconditions() const override
   {
-    return theRobotInfo.number == 1;
+    return true;
   }
 
   bool postconditions() const override
   {
-    return theRobotInfo.number != 1;
+    return true;
   }
   option
   {
