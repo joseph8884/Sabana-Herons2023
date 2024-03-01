@@ -8,7 +8,8 @@
 #include "Representations/Communication/TeamInfo.h"
 #include "Representations/Modeling/RobotPose.h"
 #include "Representations/BehaviorControl/FieldBall.h"
-
+#include "Representations/Communication/TeamData.h"
+#include "Representations/Infrastructure/FrameInfo.h"
 
 CARD(BlindBallPointCard,
 	{ ,
@@ -20,57 +21,70 @@ CARD(BlindBallPointCard,
 		REQUIRES(TeamBallModel),
 		REQUIRES(RobotInfo),
 		REQUIRES(GameInfo),
-		REQUIRES(RobotPose), 
+		REQUIRES(RobotPose),
 		REQUIRES(FieldBall),
+		REQUIRES(TeamData),
+		REQUIRES(FrameInfo),
 		DEFINES_PARAMETERS(
 		{,
 			(int)(1000) initialWaitTime,
-  }),
-});
+	}),
+	});
 
-class BlindBallPointCard: public BlindBallPointCardBase{
-   bool preconditions() const override
-    {
-        return theRobotInfo.number == 3;
-    }
-   bool postconditions() const override
-    {
-        return theRobotInfo.number != 3;
-    }
-    
-    option{
-			theActivitySkill(BehaviorStatus::BlindBallPointCard);
-		initial_state(start)
-  {
-    transition
-    {
-      if(state_time > initialWaitTime)
-        goto POINT;
-		}
-			action
-		{
-			theLookForwardSkill();
-			theStandSkill();
-		}
-      
-    }
-	state(POINT)
+class BlindBallPointCard : public BlindBallPointCardBase {
+	bool preconditions() const override
 	{
-		transition
-		{
-				if (!theFieldBall.ballWasSeen(1000)) {
+		return true;
+	}
+	bool postconditions() const override
+	{
+		return true;
+	}
+
+	option{
+		theActivitySkill(BehaviorStatus::BlindBallPointCard);
+	initial_state(start)
+{
+	transition
+	{
+		if (state_time > initialWaitTime)
+			goto POINT;
+	}
+		action
+	{
+		theLookForwardSkill();
+		theStandSkill();
+	}
+
+	}
+state(POINT)
+{
+	transition
+	{
+			for (auto const& teammate : theTeamData.teammates) {
+				if(teammate.isPenalized){
 					goto STAY;
-}
-		}
+				}
+			}
+	}
 		action
 		{
-				if(theTeamBallModel.position.y() > 0)
-				{
-					theSpecialActionSkill(SpecialActionRequest::rightArm);
+			for (auto const& teammate : theTeamData.teammates) {
+				if (teammate.isPenalized) {
+					if (teammate.number == 1) {
+						if (theRobotInfo.number == 3) {
+							theSpecialActionSkill(SpecialActionRequest::rightArm);
+						}
+					}
+					else if (teammate.number == 2) {
+						if (theRobotInfo.number == 3) {
+							theSpecialActionSkill(SpecialActionRequest::leftArm);
+						}
+					}
+				} else {
+					theLookForwardSkill();
+					theStandSkill();
 				}
-				else
-				{
-					theSpecialActionSkill(SpecialActionRequest::leftArm);
 			}
 		}
 	}
@@ -78,16 +92,18 @@ class BlindBallPointCard: public BlindBallPointCardBase{
 	{
 		transition
 		{
-				if (theFieldBall.ballWasSeen(1000)) {
+			for (auto const& teammate : theTeamData.teammates) {
+				if (teammate.isPenalized) {
 					goto POINT;
-}
+				}
+			}
 		}
 			action
 		{
-			theLookForwardSkill();
-			theStandSkill();
+				theLookForwardSkill();
+				theStandSkill();
 		}
 	}
-}
-}; 
+	}
+};
 MAKE_CARD(BlindBallPointCard);
