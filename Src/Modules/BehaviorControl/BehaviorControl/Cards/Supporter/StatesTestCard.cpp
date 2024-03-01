@@ -8,7 +8,6 @@
 #include "Representations/Communication/TeamInfo.h"
 #include "Representations/Modeling/RobotPose.h"
 #include "Representations/BehaviorControl/FieldBall.h"
-#include "Controller\GameController.h"
 #include "Representations\Communication\GameInfo.h"
 
 CARD(StatesTestCard,
@@ -20,11 +19,9 @@ CARD(StatesTestCard,
 
 		REQUIRES(TeamBallModel),
 		REQUIRES(RobotInfo),
-		REQUIRES(GameInfo),
 		REQUIRES(RobotPose), 
 		REQUIRES(FieldBall),
-        REQUIRES(GameController),
-        REQUIRES(GameInfo),
+    REQUIRES(GameInfo),
 		DEFINES_PARAMETERS(
 		{,
 			(int)(1000) initialWaitTime,
